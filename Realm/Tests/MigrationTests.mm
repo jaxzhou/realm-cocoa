@@ -98,32 +98,36 @@
 }
 
 - (void)testGetSchemaVersion {
-    XCTAssertThrows([RLMRealm schemaVersionAtPath:RLMRealm.defaultRealmPath encryptionKey:nil error:nil]);
+    NSString *defaultRealmPath = [RLMConfiguration defaultConfiguration].path;
+
+    XCTAssertThrows([RLMRealm schemaVersionAtPath:defaultRealmPath encryptionKey:nil error:nil]);
     @autoreleasepool {
         [RLMRealm defaultRealm];
     }
 
-    XCTAssertEqual(0U, [RLMRealm schemaVersionAtPath:RLMRealm.defaultRealmPath encryptionKey:nil error:nil]);
+    XCTAssertEqual(0U, [RLMRealm schemaVersionAtPath:defaultRealmPath encryptionKey:nil error:nil]);
     [RLMRealm setDefaultRealmSchemaVersion:1 withMigrationBlock:^(__unused RLMMigration *migration,
                                                                   __unused NSUInteger oldSchemaVersion) {
     }];
 
     RLMRealm *realm = [RLMRealm defaultRealm];
-    XCTAssertEqual(1U, [RLMRealm schemaVersionAtPath:RLMRealm.defaultRealmPath encryptionKey:nil error:nil]);
+    XCTAssertEqual(1U, [RLMRealm schemaVersionAtPath:defaultRealmPath encryptionKey:nil error:nil]);
     realm = nil;
 }
 
 - (void)testPerRealmMigration {
+    NSString *defaultRealmPath = [RLMConfiguration defaultConfiguration].path;
+
     @autoreleasepool {
         [RLMRealm defaultRealm];
     }
 
-    XCTAssertEqual(0U, [RLMRealm schemaVersionAtPath:RLMRealm.defaultRealmPath encryptionKey:nil error:nil]);
+    XCTAssertEqual(0U, [RLMRealm schemaVersionAtPath:defaultRealmPath encryptionKey:nil error:nil]);
     [RLMRealm setDefaultRealmSchemaVersion:1 withMigrationBlock:nil];
 
     @autoreleasepool {
         RLMRealm *defaultRealm = [RLMRealm defaultRealm];
-        RLMRealm *anotherRealm = [RLMRealm realmWithPath:RLMTestRealmPath()];
+        RLMRealm *anotherRealm = [self realmWithPath:RLMTestRealmPath()];
 
         XCTAssertEqual(1U, [RLMRealm schemaVersionAtPath:defaultRealm.path encryptionKey:nil error:nil]);
         XCTAssertEqual(0U, [RLMRealm schemaVersionAtPath:anotherRealm.path encryptionKey:nil error:nil]);
@@ -134,7 +138,7 @@
                                                                                         __unused NSUInteger oldSchemaVersion) {
         migrationComplete = true;
     }];
-    RLMRealm *anotherRealm = [RLMRealm realmWithPath:RLMTestRealmPath()];
+    RLMRealm *anotherRealm = [self realmWithPath:RLMTestRealmPath()];
 
     XCTAssertEqual(2U, [RLMRealm schemaVersionAtPath:anotherRealm.path encryptionKey:nil error:nil]);
     XCTAssertTrue(migrationComplete);
@@ -502,7 +506,7 @@
     [RLMRealm migrateRealmAtPath:RLMTestRealmPath()];
 
     // make sure deletion occurred
-    XCTAssertEqual(1U, [[MigrationPrimaryKeyObject allObjectsInRealm:[RLMRealm realmWithPath:RLMTestRealmPath()]] count]);
+    XCTAssertEqual(1U, [[MigrationPrimaryKeyObject allObjectsInRealm:[self realmWithPath:RLMTestRealmPath()]] count]);
 }
 
 - (void)testIncompleteMigrationIsRolledBack {
@@ -581,7 +585,7 @@
 
     // migration should be applied when opening realm
     @autoreleasepool {
-        [RLMRealm realmWithPath:RLMTestRealmPath()];
+        [self realmWithPath:RLMTestRealmPath()];
     }
     XCTAssertEqual(true, migrationApplied);
 
@@ -605,7 +609,7 @@
         [realm createObject:MigrationObject.className withObject:@[@1, @"1"]];
         [realm commitWriteTransaction];
     }
-    XCTAssertNoThrow([RLMRealm realmWithPath:RLMTestRealmPath()]);
+    XCTAssertNoThrow([self realmWithPath:RLMTestRealmPath()]);
 }
 
 - (void)testRearrangeProperties {
@@ -675,7 +679,10 @@
 
     Class intObjectAccessorClass;
     @autoreleasepool {
-        RLMRealm *realm = [RLMRealm realmWithPath:RLMTestRealmPath() readOnly:YES error:nil];
+        RLMRealm *realm = [RLMRealm realmWithConfiguration:[RLMConfiguration configurationWithBlock:^(id<RLMConfigurator> configurator) {
+            configurator.path = RLMTestRealmPath();
+            configurator.readonly = YES;
+        }]];
 
         intObjectAccessorClass = realm.schema[IntObject.className].accessorClass;
 
@@ -687,7 +694,7 @@
     }
 
     @autoreleasepool {
-        RLMRealm *realm = [RLMRealm realmWithPath:RLMTestRealmPath() readOnly:NO error:nil];
+        RLMRealm *realm = [self realmWithPath:RLMTestRealmPath()];
 
         // read-write realm should have a different IntObject accessor class due
         // to that we check for RLMSchema compatibility and not for each RLMObjectSchema
