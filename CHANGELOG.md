@@ -1,6 +1,10 @@
 x.x.x Release notes (yyyy-MM-dd)
 =============================================================
 
+### API breaking changes
+
+* Migration blocks are no longer called when a Realm file is first created.
+
 ### Enhancements
 
 * `RLMCollection` supports collection KVC operations.
@@ -9,7 +13,6 @@ x.x.x Release notes (yyyy-MM-dd)
 
 * `+[RLMSchema dynamicSchemaForRealm:]` now respects search indexes.
 * `+[RLMProperty isEqualToProperty:]` now checks for equal `indexed` properties.
-* Migration blocks are no longer called when a Realm file is first created.
 
 0.91.1 Release notes (2015-03-12)
 =============================================================
