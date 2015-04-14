@@ -101,8 +101,8 @@ x.x.x Release notes (yyyy-MM-dd)
 
 ### Enhancements
 
-* Calling `createInDefaultRealmWithObject:`, `createInRealm:withObject:`,
-  `createOrUpdateInDefaultRealmWithObject:` or `createOrUpdateInRealm:withObject:`
+* Calling `createInDefaultRealmWithValue:`, `createInRealm:withValue:`,
+  `createOrUpdateInDefaultRealmWithValue:` or `createOrUpdateInRealm:withValue:`
   is a no-op if the argument is an RLMObject of the same type as the receiver
   and is already backed by the target realm.
 
@@ -111,7 +111,7 @@ x.x.x Release notes (yyyy-MM-dd)
 * Fix incorrect column type assertions when the first Realm file opened is a
   read-only file that is missing tables.
 * Throw an exception when adding an invalidated or deleted object as a link.
-* Throw an exception when calling `createOrUpdateInRealm:withObject:` when the
+* Throw an exception when calling `createOrUpdateInRealm:withValue:` when the
   receiver has no primary key defined.
 
 0.90.1 Release notes (2015-01-22)
@@ -310,14 +310,14 @@ x.x.x Release notes (yyyy-MM-dd)
 
 * Add support for sorting `RLMArray`s by multiple columns with `sortedResultsUsingDescriptors:`
 * Added method `deleteAllObjects` on `RLMRealm` to clear a Realm.
-* Added method `createObject:withObject:` on `RLMMigration` which allows object creation during migrations.
+* Added method `createObject:withValue:` on `RLMMigration` which allows object creation during migrations.
 * Added method `deleteObject:` on `RLMMigration` which allows object deletion during migrations.
 * Updating to core library version 0.85.0.
 * Implement `objectsWhere:` and `objectsWithPredicate:` for array properties.
 * Add `cancelWriteTransaction` to revert all changes made in a write transaction and end the transaction.
 * Make creating `RLMRealm` instances on background threads when an instance
   exists on another thread take a fifth of the time.
-* Support for partial updates when calling `createOrUpdateWithObject:` and `addOrUpdateObject:`
+* Support for partial updates when calling `createOrUpdatewithValue:` and `addOrUpdateObject:`
 * Re-enable Swift support on OS X
 
 ### Bugfixes
@@ -421,7 +421,7 @@ x.x.x Release notes (yyyy-MM-dd)
   At the moment indexes on primary keys are not yet supported but this will be added in a future
   release.
 * Added methods to update or insert (upsert) for objects with primary keys defined.
-* `[RLMObject initWithObject:]` and `[RLMObject createInRealmWithObject:]` now support
+* `[RLMObject initWithValue:]` and `[RLMObject createInRealmwithValue:]` now support
   any object type with kvc properties.
 * The Swift support has been reworked to work around Swift not being supported
   in Frameworks on iOS 7.
@@ -586,8 +586,8 @@ x.x.x Release notes (yyyy-MM-dd)
 
 ### Enhancements
 
-* Added +createInDefaultRealmWithObject: method to RLMObject.
-* Added support for array and object literals when calling -createWithObject: and -initWithObject: variants.
+* Added +createInDefaultRealmWithValue: method to RLMObject.
+* Added support for array and object literals when calling -createwithValue: and -initWithValue: variants.
 * Added method -deleteObjects: to batch delete objects from a Realm
 * Support for defining RLMObject models entirely in Swift (experimental, see known issues).
 * RLMArrays in Swift support Sequence-style enumeration (for obj in array).
@@ -671,7 +671,7 @@ The Objective-C API has been updated and your code will break!
 * Added `toJSONString` on `RLMRealm`, `RLMTable` and `RLMView`
 * Added support for `NOT` operator in predicates
 * Added support for default values
-* Added validation support in `createInRealm:withObject:`
+* Added validation support in `createInRealm:withValue:`
 
 ### Bugfixes
 
