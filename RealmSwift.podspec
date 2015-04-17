@@ -20,7 +20,10 @@ Pod::Spec.new do |s|
   s.documentation_url       = "http://realm.io/docs/cocoa/#{s.version}"
   s.license                 = { :type => 'Apache 2.0', :file => 'LICENSE' }
 
+  s.compiler_flags          = "-DREALM_SWIFT=1"
+
   s.dependency 'Realm', "= #{s.version}"
+
   s.source_files = 'RealmSwift/*.swift'
 
   s.ios.deployment_target   = '8.0'
