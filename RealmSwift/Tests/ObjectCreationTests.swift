@@ -33,7 +33,7 @@ class ObjectCreationTests: TestCase {
 
         // test realm properties are nil for standalone
         XCTAssertNil(object.realm)
-        XCTAssertNil(object.objectCol.realm)
+        XCTAssertNil(object.objectCol!.realm)
         XCTAssertNil(object.arrayCol.realm)
     }
 
@@ -134,7 +134,7 @@ class ObjectCreationTests: TestCase {
 
         // test realm properties are populated correctly
         XCTAssertEqual(object.realm!, realm)
-        XCTAssertEqual(object.objectCol.realm!, realm)
+        XCTAssertEqual(object.objectCol!.realm!, realm)
         XCTAssertEqual(object.arrayCol.realm!, realm)
     }
 
@@ -343,7 +343,7 @@ class ObjectCreationTests: TestCase {
         Realm().commitWrite()
 
         XCTAssertNotNil(object.realm)
-        XCTAssertEqual(object.objectCol, existingObject)
+        XCTAssertEqual(object.objectCol!, existingObject)
     }
 
     func testAddAndUpdateWithExisingNestedObjects() {
@@ -370,7 +370,7 @@ class ObjectCreationTests: TestCase {
         XCTAssertEqual(object.stringCol, array[4] as String)
         XCTAssertEqual(object.binaryCol, array[5] as NSData)
         XCTAssertEqual(object.dateCol, array[6] as NSDate)
-        XCTAssertEqual(object.objectCol.boolCol, boolObjectValue)
+        XCTAssertEqual(object.objectCol!.boolCol, boolObjectValue)
         XCTAssertEqual(object.arrayCol.count, boolObjectListValues.count)
         for i in 0..<boolObjectListValues.count {
             XCTAssertEqual(object.arrayCol[i].boolCol, boolObjectListValues[i])
@@ -385,7 +385,7 @@ class ObjectCreationTests: TestCase {
         XCTAssertEqual(object.stringCol, dictionary["stringCol"] as String)
         XCTAssertEqual(object.binaryCol, dictionary["binaryCol"] as NSData)
         XCTAssertEqual(object.dateCol, dictionary["dateCol"] as NSDate)
-        XCTAssertEqual(object.objectCol.boolCol, boolObjectValue)
+        XCTAssertEqual(object.objectCol!.boolCol, boolObjectValue)
         XCTAssertEqual(object.arrayCol.count, boolObjectListValues.count)
         for i in 0..<boolObjectListValues.count {
             XCTAssertEqual(object.arrayCol[i].boolCol, boolObjectListValues[i])
